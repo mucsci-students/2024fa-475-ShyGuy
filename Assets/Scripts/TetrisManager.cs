@@ -7,7 +7,7 @@ public class TetrisManager : MonoBehaviour
     public Vector3 spawnPoint = new Vector3(0, 20, 0);
     public GameObject[] Bricks;
     public int width = 10;
-    public int height = 20;
+    public int height = 40;
 
     private Transform[,] grid;
 
@@ -28,11 +28,11 @@ public class TetrisManager : MonoBehaviour
         Instantiate(Bricks[randomIndex], spawnPoint, Quaternion.identity);
     }
 
-    public bool IsPositionValid(Transform block)
+    public bool IsPositionValid(Vector3[] blockPositions)
     {
-        foreach (Transform child in block)
+        foreach (Vector3 position in blockPositions)
         {
-            Vector3 pos = Round(child.position);
+            Vector3 pos = Round(position);
 
             if (!IsInsideGrid(pos) || IsOccupied(pos))
             {
@@ -56,17 +56,17 @@ public class TetrisManager : MonoBehaviour
     }
 
 
-    Vector3 Round(Vector3 pos)
+    public Vector3 Round(Vector3 pos)
     {
         return new Vector3(Mathf.Round(pos.x), Mathf.Round(pos.y), Mathf.Round(pos.z));
     }
 
-    bool IsInsideGrid(Vector3 pos)
+    public bool IsInsideGrid(Vector3 pos)
     {
         return pos.x >= 0 && pos.x < width && pos.y >= 0 && pos.y < height;
     }
 
-    bool IsOccupied(Vector3 pos)
+    public bool IsOccupied(Vector3 pos)
     {
         return grid[(int)pos.x, (int)pos.y] != null;
     }

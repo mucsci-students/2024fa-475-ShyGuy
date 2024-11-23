@@ -6,51 +6,44 @@ public class Brick : MonoBehaviour
 {
     public float fallTime = 1.0f;
     private float previousTime;
-    private TetrisManager tetrisManager;
+    private TetrisManager tm;
 
-    public void Start()
+    private void Awake()
     {
-        tetrisManager = FindObjectOfType<TetrisManager>();
-        if (!tetrisManager.IsPositionValid(transform))
-        {
-            Debug.Log("Game Over");
-            enabled = false;
-        }
+        tm = FindObjectOfType<TetrisManager>();
     }
 
-    public void Update()
+    private void Update()
     {
         HandleInput();
         HandleFall();
     }
 
-    void HandleInput()
+    private void HandleInput()
     {
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            transform.position += Vector3.left;
-            if (!tetrisManager.IsPositionValid(transform))
-                transform.position -= Vector3.left;
+            Move(Vector3.left);
         }
         else if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            transform.position += Vector3.right;
-            if (!tetrisManager.IsPositionValid(transform))
-                transform.position -= Vector3.right;
+            Move(Vector3.right);
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            transform.Rotate(0, 0, 90);
-            if (!tetrisManager.IsPositionValid(transform))
-                transform.Rotate(0, 0, -90);
+            Rotate(90);
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             FallOneStep();
         }
+        else if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
+        {
+            HardDrop();
+        }
     }
 
-    void HandleFall()
+    private void HandleFall()
     {
         if (Time.time - previousTime >= fallTime)
         {
@@ -59,35 +52,74 @@ public class Brick : MonoBehaviour
         }
     }
 
-    void FallOneStep()
+    private void Move(Vector3 direction)
     {
-        transform.position += Vector3.down;
+        transform.position += direction;
 
-        if (!tetrisManager.IsPositionValid(transform))
+        if (!IsCurrentPositionValid())
         {
-            transform.position -= Vector3.down;
-            tetrisManager.UpdateGrid(transform);
-
-            //spawn a new piece
-            tetrisManager.SpawnBrick();
-
-            enabled = false;
+            transform.position -= direction; // Revert move if invalid
         }
     }
-    void OnPieceLanded()
+
+    private void Rotate(float angle)
     {
-        FindObjectOfType<TetrisManager>().UpdateGrid(transform);
-        FindObjectOfType<TetrisManager>().SpawnBrick();
+        transform.Rotate(0, 0, angle);
+
+        if (!IsCurrentPositionValid())
+        {
+            transform.Rotate(0, 0, -angle); // Revert rotation if invalid
+        }
     }
 
+    private void FallOneStep()
+    {
+        Move(Vector3.down);
 
-    public void OnCollisionEnter(Collision collision)
+        if (!IsCurrentPositionValid())
+        {
+            transform.position -= Vector3.down; // Revert move
+            tm.UpdateGrid(transform);          // Update grid with final position
+
+            tm.SpawnBrick();                   // Spawn a new brick
+            enabled = false;                   // Disable this brick's script
+        }
+    }
+
+    private void HardDrop()
+    {
+        while (IsCurrentPositionValid())
+        {
+            transform.position += Vector3.down;
+        }
+        transform.position -= Vector3.down; // Revert the last invalid move
+
+        tm.UpdateGrid(transform);
+        tm.SpawnBrick();
+        enabled = false;
+    }
+
+    private bool IsCurrentPositionValid()
+    {
+        foreach (Transform child in transform)
+        {
+            Vector3 roundedPosition = tm.Round(child.position);
+
+            if (!tm.IsInsideGrid(roundedPosition) || tm.IsOccupied(roundedPosition))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Brick"))
         {
-            OnPieceLanded();
+            tm.UpdateGrid(transform);
+            tm.SpawnBrick();
+            enabled = false;
         }
     }
-
-
 }
