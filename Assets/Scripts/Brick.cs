@@ -1,125 +1,136 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Brick : MonoBehaviour
 {
-    public float fallTime = 1.0f;
-    private float previousTime;
-    private TetrisManager tm;
+    private TetrisManager tetrisManager;
+    private float dropInterval = 1f; // Time between automatic drops
+    private float dropTimer = 1f;
 
-    private void Awake()
+
+    private bool isSettled = false;
+
+    public void Initialize(TetrisManager manager)
     {
-        tm = FindObjectOfType<TetrisManager>();
+        tetrisManager = manager; // Link the TetrisManager
     }
 
-    private void Update()
+    void Update()
     {
+        if (isSettled) return;
+        dropTimer += Time.deltaTime;
+        inputTimer += Time.deltaTime;
+        if (dropTimer >= dropInterval)
+        {
+            dropTimer = 0f;
+            Drop();
+        }
         HandleInput();
-        HandleFall();
+        
+    }
+
+    private void Drop()
+    {
+        transform.position += Vector3.down;        
     }
 
     private void HandleInput()
     {
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        Debug.Log("Handling Input..."); // Add this line
+        // Horizontal Movement
+        if (Input.GetKeyDown(KeyCode.A))
         {
             Move(Vector3.left);
         }
-        else if (Input.GetKeyDown(KeyCode.RightArrow))
+        else if (Input.GetKeyDown(KeyCode.D))
         {
             Move(Vector3.right);
         }
-        else if (Input.GetKeyDown(KeyCode.UpArrow))
+
+        // Rotation
+        if (Input.GetKeyDown(KeyCode.W))
         {
-            Rotate(90);
+            Rotate(90); // Rotate clockwise
         }
-        else if (Input.GetKeyDown(KeyCode.DownArrow))
+        else if (Input.GetKeyDown(KeyCode.S))
         {
-            FallOneStep();
-        }
-        else if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
-        {
-            HardDrop();
+            Rotate(-90); // Rotate counterclockwise
         }
     }
 
-    private void HandleFall()
-    {
-        if (Time.time - previousTime >= fallTime)
-        {
-            FallOneStep();
-            previousTime = Time.time;
-        }
-    }
 
     private void Move(Vector3 direction)
     {
         transform.position += direction;
 
-        if (!IsCurrentPositionValid())
+        // If the new position is invalid, undo the move
+        if (!tetrisManager.IsPositionValid(GetChildPositions()))
         {
-            transform.position -= direction; // Revert move if invalid
+            transform.position -= direction;
+        }
+        else
+        {
+            inputTimer = 0f; // Reset input cooldown
         }
     }
 
-    private void Rotate(float angle)
+    private void RotateWithWallKick(float angle)
     {
         transform.Rotate(0, 0, angle);
 
-        if (!IsCurrentPositionValid())
+        if (!tetrisManager.IsPositionValid(GetChildPositions()))
         {
-            transform.Rotate(0, 0, -angle); // Revert rotation if invalid
-        }
-    }
+            // Try small adjustments (wall kicks)
+            Vector3[] adjustments = { Vector3.left, Vector3.right, Vector3.down };
 
-    private void FallOneStep()
-    {
-        Move(Vector3.down);
-
-        if (!IsCurrentPositionValid())
-        {
-            transform.position -= Vector3.down; // Revert move
-            tm.UpdateGrid(transform);          // Update grid with final position
-
-            tm.SpawnBrick();                   // Spawn a new brick
-            enabled = false;                   // Disable this brick's script
-        }
-    }
-
-    private void HardDrop()
-    {
-        while (IsCurrentPositionValid())
-        {
-            transform.position += Vector3.down;
-        }
-        transform.position -= Vector3.down; // Revert the last invalid move
-
-        tm.UpdateGrid(transform);
-        tm.SpawnBrick();
-        enabled = false;
-    }
-
-    private bool IsCurrentPositionValid()
-    {
-        foreach (Transform child in transform)
-        {
-            Vector3 roundedPosition = tm.Round(child.position);
-
-            if (!tm.IsInsideGrid(roundedPosition) || tm.IsOccupied(roundedPosition))
+            foreach (var adjustment in adjustments)
             {
-                return false;
+                transform.position += adjustment;
+
+                if (tetrisManager.IsPositionValid(GetChildPositions()))
+                {
+                    Debug.Log("Wall kick applied!");
+                    return; // Valid position found
+                }
+
+                transform.position -= adjustment; // Undo adjustment if still invalid
             }
+
+            // Undo rotation if no valid position found
+            transform.Rotate(0, 0, -angle);
         }
-        return true;
     }
 
-    private void OnCollisionEnter(Collision collision)
+
+    private void Rotate(float angle)
     {
-        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Brick"))
+        // Apply rotation
+        transform.Rotate(0, 0, angle);
+
+        // Check if the new rotation is valid
+        if (!tetrisManager.IsPositionValid(GetChildPositions()))
         {
-            tm.UpdateGrid(transform);
-            tm.SpawnBrick();
-            enabled = false;
+            transform.Rotate(0, 0, -angle); // Undo rotation if invalid
         }
+        else
+        {
+            Debug.Log($"Rotated {angle} degrees successfully!");
+        }
+    }
+
+    private void Settle()
+    {
+        isSettled = true;
+        tetrisManager.UpdateGrid(transform); // Notify TetrisManager of final positions
+        tetrisManager.currentBrick = null; // Allow spawning of next brick
+    }
+
+    private Vector3[] GetChildPositions()
+    {
+        Vector3[] positions = new Vector3[transform.childCount];
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            positions[i] = transform.GetChild(i).position;
+        }
+        return positions;
     }
 }
