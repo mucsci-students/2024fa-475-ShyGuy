@@ -57,6 +57,27 @@ public class GameManager : MonoBehaviour
         }
         lastMousePosition = mousePosition;
         rightMouseButtonPressed = isRightMouseButtonPressed;
+
+        // Get the scroll input
+        float scroll = Input.GetAxis("Mouse ScrollWheel");
+
+        if (Mathf.Abs(scroll) > 0.01f) // Ensure noticeable input
+        {
+            // Get the camera transform
+            Transform cameraTransform = Camera.main.transform;
+
+            // Calculate the new position by moving the camera closer or farther from the origin
+            Vector3 directionToOrigin = cameraTransform.position.normalized;
+            float zoomSpeed = 10.0f; // Adjust this value to control zoom speed
+            float newDistance = Mathf.Clamp(cameraTransform.position.magnitude - scroll * zoomSpeed, 2.0f, 10000.0f);
+
+            // Set the camera's position
+            cameraTransform.position = directionToOrigin * newDistance;
+            Debug.Log(directionToOrigin);
+
+            // Ensure the camera still looks at the origin
+            cameraTransform.LookAt(Vector3.zero);
+        }
     }
 
     public void CheckKeyInput()
@@ -68,19 +89,22 @@ public class GameManager : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.W))
         {
             // Move forward
-
+            Shape.Instance.transform.position += new Vector3(1.0f, 0.0f, 0.0f);
         }
         else if (Input.GetKeyDown(KeyCode.S))
         {
             // Move backward
+            Shape.Instance.transform.position -= new Vector3(1.0f, 0.0f, 0.0f);
         }
         else if (Input.GetKeyDown(KeyCode.A))
         {
             // Move left
+            Shape.Instance.transform.position += new Vector3(0.0f, 0.0f, 1.0f);
         }
         else if (Input.GetKeyDown(KeyCode.D))
         {
             // Move right
+            Shape.Instance.transform.position -= new Vector3(0.0f, 0.0f, 1.0f);
         }
         else if (Input.GetKeyDown(KeyCode.Q))
         {
