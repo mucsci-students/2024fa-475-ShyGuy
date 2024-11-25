@@ -5,6 +5,7 @@ public class Brick : MonoBehaviour
     private TetrisManager tetrisManager;
     private float dropInterval = 1f; // Time between automatic drops
     private float dropTimer = 1f;
+    private float inputTimer = 1f;
 
 
     private bool isSettled = false;
