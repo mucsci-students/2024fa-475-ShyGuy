@@ -73,7 +73,6 @@ public class GameManager : MonoBehaviour
 
             // Set the camera's position
             cameraTransform.position = directionToOrigin * newDistance;
-            Debug.Log(directionToOrigin);
 
             // Ensure the camera still looks at the origin
             cameraTransform.LookAt(Vector3.zero);
@@ -89,22 +88,22 @@ public class GameManager : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.W))
         {
             // Move forward
-            Shape.Instance.transform.position += new Vector3(1.0f, 0.0f, 0.0f);
+            MoveShape(new(0, 0, 1));
         }
         else if (Input.GetKeyDown(KeyCode.S))
         {
             // Move backward
-            Shape.Instance.transform.position -= new Vector3(1.0f, 0.0f, 0.0f);
+            MoveShape(new(0, 0, -1));
         }
         else if (Input.GetKeyDown(KeyCode.A))
         {
             // Move left
-            Shape.Instance.transform.position += new Vector3(0.0f, 0.0f, 1.0f);
+            MoveShape(new(-1, 0, 0));
         }
         else if (Input.GetKeyDown(KeyCode.D))
         {
             // Move right
-            Shape.Instance.transform.position -= new Vector3(0.0f, 0.0f, 1.0f);
+            MoveShape(new(1, 0, 0));
         }
         else if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -116,5 +115,37 @@ public class GameManager : MonoBehaviour
             // Rotate vertically
             Shape.Instance.RotateVertically();
         }
+        else if (Input.GetKeyDown(KeyCode.Space))
+        {
+            // Place shape
+            Base.Instance.PlaceBlock();
+        }
+    }
+
+    public void MoveShape(Vector3Int movement)
+    {
+        Vector3Int newPos = Shape.Instance.currentPos + movement;
+        if (newPos.x < 0 || newPos.x + 2 >= Base.Instance.width ||
+            newPos.z < 0 || newPos.z + 2 >= Base.Instance.depth)
+        {
+            // Out of bounds
+            return;
+        }
+        int heightDiff = int.MaxValue;
+        for (int x = 0; x < 3; ++x)
+        {
+            for (int z = 0; z < 3; ++z)
+            {
+                heightDiff = Mathf.Min(heightDiff,
+                    newPos.y + Shape.Instance.LowestY(x, z) - Base.Instance.HighestY(x, z));
+            }
+        }
+        if (heightDiff < 6)
+        {
+            // Ensure 5 unit spaces between closest y
+            newPos.y += 6 - heightDiff;
+        }
+        Shape.Instance.currentPos = newPos;
+        Shape.Instance.transform.position = newPos;
     }
 }

@@ -26,6 +26,9 @@ public class Shape : MonoBehaviour
 
     private Transform[,,] subCubes; // Array to hold references to the 27 sub GameObjects
 
+    // Position in integers, (0, 0, 0) is at bottom left
+    public Vector3Int currentPos = new(0, 0, 0);
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -79,12 +82,21 @@ public class Shape : MonoBehaviour
     private void GenerateRandomShape()
     {
         currentShape = new bool[3, 3, 3];
+        int cnt = 0;
         for (int x = 0; x < 3; ++x)
         {
             for (int z = 0; z < 3; ++z)
             {
                 currentShape[x, 0, z] = Random.Range(0, 2) == 1;
+                if (currentShape[x, 0, z])
+                {
+                    ++cnt;
+                }
             }
+        }
+        if (cnt == 0)
+        {
+            currentShape[1, 0, 1] = true;
         }
 
         for (int y = 1; y < 3; ++y)
@@ -168,5 +180,17 @@ public class Shape : MonoBehaviour
                 }
             }
         }
+    }
+
+    public int LowestY(int x, int z)
+    {
+        for (int y = 0; y < 3; y++)
+        {
+            if ((currentShape[x, y, z]))
+            {
+                return y;
+            }
+        }
+        return int.MaxValue / 3;
     }
 }
