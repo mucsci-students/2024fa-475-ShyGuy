@@ -21,8 +21,10 @@ public class Shape : MonoBehaviour
     };
 
     public bool[,,] currentShape;
-    public long     currentBlockId;
-    public Color    currentColor;
+    public long currentBlockId;
+    public Color currentColor;
+
+    private Transform[,,] subCubes; // Array to hold references to the 27 sub GameObjects
 
     private void Awake()
     {
@@ -39,12 +41,32 @@ public class Shape : MonoBehaviour
 
     void Start()
     {
+        // Initialize subCubes array
+        subCubes = new Transform[3, 3, 3];
+        for (int x = 0; x < 3; x++)
+        {
+            for (int y = 0; y < 3; y++)
+            {
+                for (int z = 0; z < 3; z++)
+                {
+                    // Find sub GameObjects named like "Cubexyz"
+                    Transform subCube = transform.Find($"Cube{x}{y}{z}");
+                    if (subCube == null)
+                    {
+                        Debug.Log($"Cube{x}{y}{z} not found! Game is broken!");
+                    }
+                    subCubes[x, y, z] = subCube;
+                }
+            }
+        }
+
         GetNewShape();
     }
 
     public void GetNewShape()
     {
         SpawnRandomShape();
+        UpdateShapeDisplay();
     }
 
     public void SpawnRandomShape()
@@ -56,9 +78,7 @@ public class Shape : MonoBehaviour
 
     private void GenerateRandomShape()
     {
-        // Create a random shape within 3x3x3 space
         currentShape = new bool[3, 3, 3];
-        // Build the bottom level first
         for (int x = 0; x < 3; ++x)
         {
             for (int z = 0; z < 3; ++z)
@@ -66,7 +86,7 @@ public class Shape : MonoBehaviour
                 currentShape[x, 0, z] = Random.Range(0, 2) == 1;
             }
         }
-        // Build the rest two levels
+
         for (int y = 1; y < 3; ++y)
         {
             for (int x = 0; x < 3; ++x)
@@ -75,7 +95,6 @@ public class Shape : MonoBehaviour
                 {
                     if (currentShape[x, y - 1, z])
                     {
-                        // Only when their is a block immediately below this block
                         currentShape[x, y, z] = Random.Range(0, 2) == 1;
                     }
                 }
@@ -95,7 +114,6 @@ public class Shape : MonoBehaviour
 
     public void RotateHorizontally()
     {
-        // Rotate around the Y-axis
         bool[,,] rotated = new bool[3, 3, 3];
         for (int y = 0; y < 3; y++)
         {
@@ -103,17 +121,16 @@ public class Shape : MonoBehaviour
             {
                 for (int z = 0; z < 3; z++)
                 {
-                    // Swap X and Z, and reverse the Z index
                     rotated[z, y, 2 - x] = currentShape[x, y, z];
                 }
             }
         }
         currentShape = rotated;
+        UpdateShapeDisplay();
     }
 
     public void RotateVertically()
     {
-        // Rotate around the Z-axis
         bool[,,] rotated = new bool[3, 3, 3];
         for (int y = 0; y < 3; y++)
         {
@@ -121,11 +138,35 @@ public class Shape : MonoBehaviour
             {
                 for (int z = 0; z < 3; z++)
                 {
-                    // Swap X and Y, and reverse the X index
                     rotated[2 - y, x, z] = currentShape[x, y, z];
                 }
             }
         }
         currentShape = rotated;
+        UpdateShapeDisplay();
+    }
+
+    public void UpdateShapeDisplay()
+    {
+        for (int x = 0; x < 3; x++)
+        {
+            for (int y = 0; y < 3; y++)
+            {
+                for (int z = 0; z < 3; z++)
+                {
+                    if (currentShape[x, y, z])
+                    {
+                        // Cube exists, set it to active and update color
+                        subCubes[x, y, z].gameObject.SetActive(true); // Make the cube visible
+                        subCubes[x, y, z].GetComponent<Renderer>().material.color = currentColor;
+                    }
+                    else
+                    {
+                        // Cube does not exist, set it to inactive
+                        subCubes[x, y, z].gameObject.SetActive(false); // Hide the cube
+                    }
+                }
+            }
+        }
     }
 }
