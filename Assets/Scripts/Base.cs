@@ -25,7 +25,7 @@ public class Base : MonoBehaviour
 
     void Start()
     {
-        Initialize(8, 8, 8); // Example initialization
+        Initialize(8, 8, 16); // Example initialization
     }
 
     // Initialize the grid with dimensions
@@ -61,10 +61,12 @@ public class Base : MonoBehaviour
         {
             for (int z = 0; z < 3; ++z)
             {
+                Vector3Int pos = shape.currentPos + new Vector3Int(x, 0, z);
                 heightDiff = Mathf.Min(heightDiff,
-                    shape.currentPos.y + shape.LowestY(x, z) - HighestY(x, z));
+                    pos.y + shape.LowestY(x, z) - HighestY(pos.x, pos.z));
             }
         }
+        --heightDiff;
 
         // Add the shape to the grid
         for (int x = 0; x < 3; x++)

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.ProBuilder.Shapes;
 
 public class GameManager : MonoBehaviour
 {
@@ -136,8 +137,9 @@ public class GameManager : MonoBehaviour
         {
             for (int z = 0; z < 3; ++z)
             {
+                Vector3Int pos = Shape.Instance.currentPos + new Vector3Int(x, 0, z);
                 heightDiff = Mathf.Min(heightDiff,
-                    newPos.y + Shape.Instance.LowestY(x, z) - Base.Instance.HighestY(x, z));
+                    pos.y + Shape.Instance.LowestY(x, z) - Base.Instance.HighestY(pos.x, pos.z));
             }
         }
         if (heightDiff < 6)
