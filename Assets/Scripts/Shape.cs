@@ -29,6 +29,18 @@ public class Shape : MonoBehaviour
     // Position in integers, (0, 0, 0) is at bottom left
     public Vector3Int currentPos = new(0, 0, 0);
 
+    private Camera[] cameras = new Camera[6];
+
+    Vector3[] camerasOffsets = new Vector3[]
+        {
+        new Vector3(0, 1, -5),  // Front
+        new Vector3(0, 0, 5),   // Back
+        new Vector3(5, 0, 0),   // Left
+        new Vector3(-5, 0, 0),  // Right
+        new Vector3(0, -5, 0),  // Top
+        new Vector3(0, 5, 0)    // Bottom
+        };
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -64,12 +76,19 @@ public class Shape : MonoBehaviour
         }
 
         GetNewShape();
+
+        AddSixCamerasAround();
+    }
+
+    void Update()
+    {
+        UpdateShapeDisplay();
+        UpdateCameraPositions();
     }
 
     public void GetNewShape()
     {
         SpawnRandomShape();
-        UpdateShapeDisplay();
     }
 
     public void SpawnRandomShape()
@@ -124,6 +143,39 @@ public class Shape : MonoBehaviour
         currentBlockId = blockIdCounter++;
     }
 
+    public void AddSixCamerasAround()
+    {
+        // Grid layout for camera viewports (3x2 grid in the top-left corner, smaller size)
+        Rect[] viewports = new Rect[]
+        {
+        new Rect(0f, 0.66f, 0.16f, 0.16f), // Top-left
+        new Rect(0.17f, 0.66f, 0.16f, 0.16f), // Top-middle
+        new Rect(0f, 0.50f, 0.16f, 0.16f), // Middle-left
+        new Rect(0.17f, 0.50f, 0.16f, 0.16f), // Middle-right
+        new Rect(0f, 0.34f, 0.16f, 0.16f), // Bottom-left
+        new Rect(0.17f, 0.34f, 0.16f, 0.16f)  // Bottom-right
+        };
+
+        // Create and configure cameras
+        for (int i = 0; i < 6; i++)
+        {
+            GameObject cameraObject = new GameObject($"Camera_{i}");
+            Camera cam = cameraObject.AddComponent<Camera>();
+
+            // Position the camera based on the offset
+            cameraObject.transform.position = transform.position + camerasOffsets[i];
+
+            // Make the camera look at the shape
+            cameraObject.transform.LookAt(transform.position);
+
+            // Assign a viewport to each camera
+            cam.rect = viewports[i];
+
+            // Store the camera in a list for dynamic updates
+            cameras[i] = cam;
+        }
+    }
+
     public void RotateHorizontally()
     {
         bool[,,] rotated = new bool[3, 3, 3];
@@ -138,7 +190,6 @@ public class Shape : MonoBehaviour
             }
         }
         currentShape = rotated;
-        UpdateShapeDisplay();
     }
 
     public void RotateVertically()
@@ -155,7 +206,15 @@ public class Shape : MonoBehaviour
             }
         }
         currentShape = rotated;
-        UpdateShapeDisplay();
+    }
+
+    public void UpdateCameraPositions()
+    {
+        for (int i = 0; i < cameras.Length; i++)
+        {
+            // Update camera position
+            cameras[i].transform.position = transform.position + camerasOffsets[i];
+        }
     }
 
     public void UpdateShapeDisplay()

@@ -10,6 +10,8 @@ public class Base : MonoBehaviour
     public int height;
     private Dictionary<Vector3Int, Block> grid;
 
+    private GameObject topRightCameraObject;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -26,7 +28,19 @@ public class Base : MonoBehaviour
     void Start()
     {
         Initialize(8, 8, 16); // Example initialization
+        AddTopRightCamera();  // Add the top-right camera
     }
+
+    void Update()
+    {
+        UpdateTopRightCamera();
+    }
+
+    public void UpdateTopRightCamera()
+    {
+        topRightCameraObject.transform.position = new Vector3(width / 2f, height + 10f, depth / 2f);
+    }
+
 
     // Initialize the grid with dimensions
     public void Initialize(int width, int depth, int height)
@@ -37,6 +51,24 @@ public class Base : MonoBehaviour
 
         grid = new Dictionary<Vector3Int, Block>();
     }
+
+    public void AddTopRightCamera()
+    {
+        // Create a new camera
+        topRightCameraObject = new GameObject("TopRightCamera");
+        Camera topRightCamera = topRightCameraObject.AddComponent<Camera>();
+
+        // Set the camera's position above the base
+        float cameraHeight = height + 10f; // Adjust for a better view
+        topRightCameraObject.transform.position = new Vector3(width / 2f, cameraHeight, depth / 2f);
+
+        // Make the camera look down at the base
+        topRightCameraObject.transform.rotation = Quaternion.Euler(90f, 0f, 0f); // Top-down view
+
+        // Set the camera's viewport in the top-right corner
+        topRightCamera.rect = new Rect(0.75f, 0.75f, 0.2f, 0.2f); // Adjust as needed for size and position
+    }
+
 
     // Resize the grid for a new game
     public void ResizeBase(int newWidth, int newDepth, int newHeight)
