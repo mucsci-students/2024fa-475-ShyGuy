@@ -126,16 +126,16 @@ public class GameManager : MonoBehaviour
     public void MoveShape(Vector3Int movement)
     {
         Vector3Int newPos = Shape.Instance.currentPos + movement;
-        if (newPos.x < 0 || newPos.x + 2 >= Base.Instance.width ||
-            newPos.z < 0 || newPos.z + 2 >= Base.Instance.depth)
+        if (newPos.x < 0 || newPos.x + 1 >= Base.Instance.width ||
+            newPos.z < 0 || newPos.z + 1 >= Base.Instance.depth)
         {
             // Out of bounds
             return;
         }
         int heightDiff = int.MaxValue;
-        for (int x = 0; x < 3; ++x)
+        for (int x = 0; x < 2; ++x)
         {
-            for (int z = 0; z < 3; ++z)
+            for (int z = 0; z < 2; ++z)
             {
                 Vector3Int pos = Shape.Instance.currentPos + new Vector3Int(x, 0, z);
                 heightDiff = Mathf.Min(heightDiff,

@@ -24,7 +24,7 @@ public class Shape : MonoBehaviour
     public long currentBlockId;
     public Color currentColor;
 
-    private Transform[,,] subCubes; // Array to hold references to the 27 sub GameObjects
+    private Transform[,,] subCubes; // Array to hold references to the 8 sub GameObjects
 
     // Position in integers, (0, 0, 0) is at bottom left
     public Vector3Int currentPos = new(0, 0, 0);
@@ -57,12 +57,12 @@ public class Shape : MonoBehaviour
     void Start()
     {
         // Initialize subCubes array
-        subCubes = new Transform[3, 3, 3];
-        for (int x = 0; x < 3; x++)
+        subCubes = new Transform[2, 2, 2];
+        for (int x = 0; x < 2; x++)
         {
-            for (int y = 0; y < 3; y++)
+            for (int y = 0; y < 2; y++)
             {
-                for (int z = 0; z < 3; z++)
+                for (int z = 0; z < 2; z++)
                 {
                     // Find sub GameObjects named like "Cubexyz"
                     Transform subCube = transform.Find($"Cube{x}{y}{z}");
@@ -100,11 +100,11 @@ public class Shape : MonoBehaviour
 
     private void GenerateRandomShape()
     {
-        currentShape = new bool[3, 3, 3];
+        currentShape = new bool[2, 2, 2];
         int cnt = 0;
-        for (int x = 0; x < 3; ++x)
+        for (int x = 0; x < 2; ++x)
         {
-            for (int z = 0; z < 3; ++z)
+            for (int z = 0; z < 2; ++z)
             {
                 currentShape[x, 0, z] = Random.Range(0, 2) == 1;
                 if (currentShape[x, 0, z])
@@ -115,14 +115,14 @@ public class Shape : MonoBehaviour
         }
         if (cnt == 0)
         {
-            currentShape[1, 0, 1] = true;
+            currentShape[0, 0, 0] = true; // Ensure at least one block exists
         }
 
-        for (int y = 1; y < 3; ++y)
+        for (int y = 1; y < 2; ++y)
         {
-            for (int x = 0; x < 3; ++x)
+            for (int x = 0; x < 2; ++x)
             {
-                for (int z = 0; z < 3; ++z)
+                for (int z = 0; z < 2; ++z)
                 {
                     if (currentShape[x, y - 1, z])
                     {
@@ -178,14 +178,14 @@ public class Shape : MonoBehaviour
 
     public void RotateHorizontally()
     {
-        bool[,,] rotated = new bool[3, 3, 3];
-        for (int y = 0; y < 3; y++)
+        bool[,,] rotated = new bool[2, 2, 2];
+        for (int y = 0; y < 2; y++)
         {
-            for (int x = 0; x < 3; x++)
+            for (int x = 0; x < 2; x++)
             {
-                for (int z = 0; z < 3; z++)
+                for (int z = 0; z < 2; z++)
                 {
-                    rotated[z, y, 2 - x] = currentShape[x, y, z];
+                    rotated[z, y, 1 - x] = currentShape[x, y, z];
                 }
             }
         }
@@ -194,14 +194,14 @@ public class Shape : MonoBehaviour
 
     public void RotateVertically()
     {
-        bool[,,] rotated = new bool[3, 3, 3];
-        for (int y = 0; y < 3; y++)
+        bool[,,] rotated = new bool[2, 2, 2];
+        for (int y = 0; y < 2; y++)
         {
-            for (int x = 0; x < 3; x++)
+            for (int x = 0; x < 2; x++)
             {
-                for (int z = 0; z < 3; z++)
+                for (int z = 0; z < 2; z++)
                 {
-                    rotated[2 - y, x, z] = currentShape[x, y, z];
+                    rotated[1 - y, x, z] = currentShape[x, y, z];
                 }
             }
         }
@@ -219,11 +219,11 @@ public class Shape : MonoBehaviour
 
     public void UpdateShapeDisplay()
     {
-        for (int x = 0; x < 3; x++)
+        for (int x = 0; x < 2; x++)
         {
-            for (int y = 0; y < 3; y++)
+            for (int y = 0; y < 2; y++)
             {
-                for (int z = 0; z < 3; z++)
+                for (int z = 0; z < 2; z++)
                 {
                     if (currentShape[x, y, z])
                     {
@@ -243,7 +243,7 @@ public class Shape : MonoBehaviour
 
     public int LowestY(int x, int z)
     {
-        for (int y = 0; y < 3; y++)
+        for (int y = 0; y < 2; y++)
         {
             if ((currentShape[x, y, z]))
             {
