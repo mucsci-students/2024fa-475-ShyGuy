@@ -8,6 +8,8 @@ public class Base : MonoBehaviour
     public int width;
     public int depth;
     public int height;
+    public int clearedRows;
+    public bool gameOver;
     private Dictionary<Vector3Int, Block> grid;
 
     private GameObject topRightCameraObject;
@@ -30,6 +32,7 @@ public class Base : MonoBehaviour
 
     void Start()
     {
+        gameOver = false;
         Initialize(8, 8, 16); // Example initialization
         AddTopRightCamera();  // Add the top-right camera
         CreateBasePlane();    // Create the plane of squares
@@ -53,6 +56,7 @@ public class Base : MonoBehaviour
         this.width = width;
         this.depth = depth;
         this.height = height;
+        this.clearedRows = 0;
 
         grid = new Dictionary<Vector3Int, Block>();
     }
@@ -210,6 +214,7 @@ public class Base : MonoBehaviour
                         {
                             // Game over
                             Debug.Log("Game over!");
+                            gameOver = true;
                             return false;
                         }
 
@@ -261,6 +266,7 @@ public class Base : MonoBehaviour
             {
                 ClearLevel(y);
                 MoveDownLevelsAbove(y);
+                clearedRows++;
             }
             else
             {

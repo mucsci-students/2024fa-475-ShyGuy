@@ -7,6 +7,7 @@ public class Shape : MonoBehaviour
     public static Shape Instance { get; private set; }
 
     public static long blockIdCounter = 0;
+    public int blockCount;
 
     public static Color[] availableColors = new Color[]
     {
@@ -101,6 +102,7 @@ public class Shape : MonoBehaviour
     private void GenerateRandomShape()
     {
         currentShape = new bool[2, 2, 2];
+        blockCount = 0;
         int cnt = 0;
         for (int x = 0; x < 2; ++x)
         {
@@ -110,12 +112,14 @@ public class Shape : MonoBehaviour
                 if (currentShape[x, 0, z])
                 {
                     ++cnt;
+                    ++blockCount;
                 }
             }
         }
         if (cnt == 0)
         {
             currentShape[0, 0, 0] = true; // Ensure at least one block exists
+            ++blockCount;
         }
 
         for (int y = 1; y < 2; ++y)
@@ -127,6 +131,8 @@ public class Shape : MonoBehaviour
                     if (currentShape[x, y - 1, z])
                     {
                         currentShape[x, y, z] = Random.Range(0, 2) == 1;
+                        if(currentShape[x, y, z])
+                        blockCount++;
                     }
                 }
             }
