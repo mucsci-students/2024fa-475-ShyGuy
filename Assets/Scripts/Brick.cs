@@ -103,6 +103,7 @@ public class Brick : MonoBehaviour
 
 
     private void Rotate(float angle)
+    
     {
         // Apply rotation
         transform.Rotate(0, 0, angle);

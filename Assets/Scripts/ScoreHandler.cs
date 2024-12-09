@@ -11,6 +11,8 @@ public class ScoreHandler : MonoBehaviour
     public Base baseScript;
     public GameObject shapeObject;
     public Shape shapeScript;
+    public GameObject gameManager;
+    public GameManager gameScript;
     public int prevScore;
     public int curScore;
     public int rows;
@@ -26,11 +28,18 @@ public class ScoreHandler : MonoBehaviour
         baseScript = baseObject.GetComponent<Base>();
         shapeObject = GameObject.Find("Shape");
         shapeScript = shapeObject.GetComponent<Shape>();
+        gameManager = GameObject.Find("GameManager");
+        gameScript = gameManager.GetComponent<GameManager>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(gameScript.skipHere == true)
+        {
+            curBlock++;
+            gameScript.skipHere = false;
+        }
         if(!baseScript.gameOver)
         {
             if(baseScript.clearedRows > rows)

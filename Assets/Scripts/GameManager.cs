@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     // Camera rotation
     private Vector3 lastMousePosition;
     private bool rightMouseButtonPressed;
+    public bool skipHere;
 
     // Whether or not the player can use keys at this moment
     public bool playerKeyControlled = true;
@@ -84,6 +85,7 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Tab))
         {
+            skipHere = true;
             Shape.Instance.GetNewShape();
         }
         else if (Input.GetKeyDown(KeyCode.Return))
