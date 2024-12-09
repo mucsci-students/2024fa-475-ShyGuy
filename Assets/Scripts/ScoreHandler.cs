@@ -46,6 +46,19 @@ public class ScoreHandler : MonoBehaviour
                 curScore += (shapeScript.blockCount * 10);
             }
         }
+        else
+        {
+            // MDF: Temporary design
+            SceneManager.LoadScene("Main Menu");
+        }
+
+        // MDF: Temporary design
+        if (curScore >= 1000)
+        {
+            Base.Instance.UpgradeBase();
+            curScore = 0;
+            updateScore();
+        }
     }
     public void updateScore()
     {

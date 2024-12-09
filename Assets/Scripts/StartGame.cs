@@ -10,7 +10,8 @@ public class StartGame : MonoBehaviour
     public void StartGameNow()
     {
         //Loads game scene.
-        SceneManager.LoadScene(2);
+        // MDF: Temporary design
+        SceneManager.LoadScene("MDF_playground");
     }
     public void Instructions()
     {

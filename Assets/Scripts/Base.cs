@@ -26,7 +26,7 @@ public class Base : MonoBehaviour
         else
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
         }
     }
 
@@ -58,6 +58,13 @@ public class Base : MonoBehaviour
         this.height = height;
         this.clearedRows = 0;
 
+        if (grid != null)
+        {
+            foreach (var block in grid)
+            {
+                Destroy(block.Value.Cube);
+            }
+        }
         grid = new Dictionary<Vector3Int, Block>();
     }
 
@@ -68,8 +75,7 @@ public class Base : MonoBehaviour
         Camera topRightCamera = topRightCameraObject.AddComponent<Camera>();
 
         // Set the camera's position above the base
-        float cameraHeight = height + 10f; // Adjust for a better view
-        topRightCameraObject.transform.position = new Vector3(width / 2f, cameraHeight, depth / 2f);
+        topRightCameraObject.transform.position = new Vector3(width / 2f, height + 10f, depth / 2f);
 
         // Make the camera look down at the base
         topRightCameraObject.transform.rotation = Quaternion.Euler(90f, 0f, 0f); // Top-down view
@@ -169,18 +175,34 @@ public class Base : MonoBehaviour
     }
 
     // Resize the grid for a new game
-    public void ResizeBase(int newWidth, int newDepth, int newHeight, bool upgrade = true)
+    public void ResizeBase(int newWidth, int newDepth, int newHeight)
     {
         width = newWidth;
         depth = newDepth;
-        if (upgrade)
-        {
-            width += 2;
-            depth += 2;
-        }
         height = newHeight;
         Initialize(newWidth, newDepth, newHeight); // Re-initialize the grid
     }
+
+    // Upgrade the grid for a new game
+    public void UpgradeBase()
+    {
+        // Increase dimensions
+        width += 2;
+        depth += 2;
+        height += 2;
+
+        // Reinitialize the grid and related structures
+        Initialize(width, depth, height);
+
+        // Update the top-right camera
+        UpdateTopRightCamera();
+
+        // Recreate the base plane to match the new dimensions
+        Destroy(planeParent); // Remove the old plane
+        CreateBasePlane();
+
+    }
+
 
     // Place a block shape in the grid
     public bool PlaceBlock()
