@@ -283,6 +283,14 @@ public class Base : MonoBehaviour
         }
     }
 
+    public void ClearLevelAnyway(int y)
+    {
+        ClearLevel(y);
+        MoveDownLevelsAbove(y);
+        // No gain for this clear
+        //clearedRows++;
+    }
+
     private bool IsLevelFull(int y, int tolerance = 5)
     {
         int cnt = 0;
@@ -351,5 +359,9 @@ public class Base : MonoBehaviour
             }
         }
         return -1;
+    }
+    public Vector3 Center()
+    {
+        return new Vector3(width / 2.0f, 0.0f, depth / 2.0f);
     }
 }

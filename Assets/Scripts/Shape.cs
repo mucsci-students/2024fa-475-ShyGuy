@@ -78,13 +78,16 @@ public class Shape : MonoBehaviour
 
         GetNewShape();
 
-        AddSixCamerasAround();
+        // Ensure the shape starts at the right height
+        transform.position = new(0, 5, 0);
+
+        //AddSixCamerasAround();
     }
 
     void Update()
     {
         UpdateShapeDisplay();
-        UpdateCameraPositions();
+        //UpdateCameraPositions();
     }
 
     public void GetNewShape()

@@ -48,11 +48,11 @@ public class GameManager : MonoBehaviour
             Vector3 mouseDelta = mousePosition - lastMousePosition;
 
             // Convert mouse movement to camera rotation (spherical coordinates)
-            float rotationX = -mouseDelta.y * (Time.deltaTime * 250.0f);
-            float rotationY = mouseDelta.x * (Time.deltaTime * 250.0f);
+            float rotationX = -mouseDelta.y * (Time.deltaTime * 150.0f);
+            float rotationY = mouseDelta.x * (Time.deltaTime * 150.0f);
 
             // Apply rotation around the origin (transform the camera's rotation)
-            Vector3 focus = Vector3.zero;
+            Vector3 focus = Base.Instance.Center();
             Camera.main.transform.RotateAround(focus, Camera.main.transform.right, rotationX);
             Camera.main.transform.RotateAround(focus, Vector3.up, rotationY);
         }
@@ -85,6 +85,11 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             Shape.Instance.GetNewShape();
+        }
+        else if (Input.GetKeyDown(KeyCode.Return))
+        {
+            // Clear the bottom level
+            Base.Instance.ClearLevelAnyway(0);
         }
         else if (Input.GetKeyDown(KeyCode.W))
         {
