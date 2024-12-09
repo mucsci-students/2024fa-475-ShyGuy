@@ -33,7 +33,7 @@ public class Base : MonoBehaviour
     void Start()
     {
         gameOver = false;
-        Initialize(8, 8, 16); // Example initialization
+        Initialize(4, 4, 16); // Example initialization
         AddTopRightCamera();  // Add the top-right camera
         CreateBasePlane();    // Create the plane of squares
     }
@@ -169,10 +169,15 @@ public class Base : MonoBehaviour
     }
 
     // Resize the grid for a new game
-    public void ResizeBase(int newWidth, int newDepth, int newHeight)
+    public void ResizeBase(int newWidth, int newDepth, int newHeight, bool upgrade = true)
     {
         width = newWidth;
         depth = newDepth;
+        if (upgrade)
+        {
+            width += 2;
+            depth += 2;
+        }
         height = newHeight;
         Initialize(newWidth, newDepth, newHeight); // Re-initialize the grid
     }
@@ -234,6 +239,9 @@ public class Base : MonoBehaviour
             }
         }
         Shape.Instance.GetNewShape();
+
+        CheckAndClearFullLevels();
+
         return true;
     }
 
@@ -324,6 +332,7 @@ public class Base : MonoBehaviour
                     if (grid.ContainsKey(currentPosition))
                     {
                         grid[belowPosition] = grid[currentPosition];
+                        grid[belowPosition].Cube.transform.position = belowPosition;
                         grid.Remove(currentPosition);
                     }
                 }
