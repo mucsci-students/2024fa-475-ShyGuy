@@ -37,20 +37,21 @@ public class ScoreHandler : MonoBehaviour
     {
         if(gameScript.skipHere == true)
         {
-            curBlock++;
+            curBlock += 1;
             gameScript.skipHere = false;
+            
         }
         if(!baseScript.gameOver)
         {
             if(baseScript.clearedRows > rows)
             {
                 curScore += 100;
-                rows++;
+                rows += 1;
                 updateScore();
             }
             if(shapeScript.currentBlockId != curBlock)
             {
-                curBlock +=1;
+                curBlock += 1;
                 updateScore();
                 curScore += (shapeScript.blockCount * 10);
             }

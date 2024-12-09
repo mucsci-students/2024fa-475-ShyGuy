@@ -125,6 +125,7 @@ public class Shape : MonoBehaviour
             ++blockCount;
         }
 
+
         for (int y = 1; y < 2; ++y)
         {
             for (int x = 0; x < 2; ++x)
