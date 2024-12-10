@@ -17,6 +17,8 @@ public class Base : MonoBehaviour
     private GameObject planeParent;
     private Dictionary<Vector3Int, GameObject> planeSquares;
 
+    public SoundManager audio1;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -28,6 +30,7 @@ public class Base : MonoBehaviour
             Instance = this;
             //DontDestroyOnLoad(gameObject);
         }
+        audio1 = FindObjectOfType<SoundManager>();
     }
 
     void Start()
@@ -260,6 +263,7 @@ public class Base : MonoBehaviour
                 }
             }
         }
+        audio1.PlayEffect(audio1.drop);
         Shape.Instance.GetNewShape();
 
         CheckAndClearFullLevels();
@@ -344,6 +348,7 @@ public class Base : MonoBehaviour
                 }
             }
         }
+        audio1.PlayEffect(audio1.rowClear);
     }
 
     private void MoveDownLevelsAbove(int clearedLevel)

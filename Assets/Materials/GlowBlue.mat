@@ -15,7 +15,6 @@ Material:
   - _ALPHAPREMULTIPLY_ON
   - _EMISSION
   - _NORMALMAP
-  - _PARALLAXMAP
   m_InvalidKeywords:
   - _REQUIRE_UV2
   m_LightmapFlags: 0

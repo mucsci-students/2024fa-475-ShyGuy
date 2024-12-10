@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
+
     // Camera rotation
     private Vector3 lastMousePosition;
     private bool rightMouseButtonPressed;
