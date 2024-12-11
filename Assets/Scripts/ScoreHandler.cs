@@ -77,6 +77,7 @@ public class ScoreHandler : MonoBehaviour
         if (curScore >= (scoreLimit + (upgradeCount * 500)))
         {
             Base.Instance.UpgradeBase();
+            TextDisplay.Instance.TriggerText("Good job! What's next? A bigger one?");
             curScore = 0;
             upgradeCount +=1;
             updateScore();

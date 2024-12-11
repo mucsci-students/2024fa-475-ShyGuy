@@ -105,6 +105,7 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Tab))
         {
+            TextDisplay.Instance.TriggerText("A new one...That'll cost me...");
             skipHere = true;
             Shape.Instance.GetNewShape();
         }
