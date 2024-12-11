@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Airplane : MonoBehaviour
 {
-    public float speed;
+    public float speed = 20;
     private bool isActive = false; // Controls whether the airplane is moving
 
     private Renderer[] renderers;
@@ -10,8 +10,8 @@ public class Airplane : MonoBehaviour
     void Start()
     {
         // Set the starting position
-        transform.position = new Vector3(-150, 15, 0);
-        transform.rotation = Quaternion.Euler(10f, 90f, 0f);
+        transform.position = new Vector3(-150, 32, 0);
+        transform.rotation = Quaternion.Euler(8f, 90f, 0f);
 
         // Cache all renderers and disable visibility
         renderers = GetComponentsInChildren<Renderer>();
@@ -23,8 +23,10 @@ public class Airplane : MonoBehaviour
         // Only move if active
         if (isActive)
         {
-            float moveAmount = speed * Time.deltaTime;
+            float moveAmount = 3 * speed * Time.deltaTime;
+            float rotateAmount = 4 * Time.deltaTime;
             transform.Translate(Vector3.forward * moveAmount);
+            transform.Rotate(Vector3.forward * rotateAmount);
         }
     }
 

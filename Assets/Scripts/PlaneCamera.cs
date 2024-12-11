@@ -15,8 +15,8 @@ public class PlaneCamera : MonoBehaviour
         targetTransform = targetObject.transform;
 
         // Set its position and rotation
-        targetTransform.position = new Vector3(0f, 15f, 5f);
-        targetTransform.rotation = Quaternion.Euler(0f, 75f, 0f);
+        targetTransform.position = new Vector3(0f, 15f, 2f);
+        targetTransform.rotation = Quaternion.Euler(0f, -85f, 0f);
     }
 
     void Update()
@@ -45,4 +45,6 @@ public class PlaneCamera : MonoBehaviour
         targetTransform = newTarget;
         moving = true;
     }
+
+    
 }

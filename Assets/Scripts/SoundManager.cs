@@ -16,7 +16,6 @@ public class SoundManager : MonoBehaviour
     [SerializeField] public AudioClip plane;
     [SerializeField] public AudioClip drop;
     [SerializeField] public AudioClip rowClear;
-    [SerializeField] private AudioClip gameOver;
     [SerializeField] private AudioClip background;
     [SerializeField] private AudioClip background2;
 
@@ -40,6 +39,12 @@ public class SoundManager : MonoBehaviour
 
     }
 
+    public void PauseTracks()
+    {
+        citynoise.Pause();
+        music.Pause();
+    }
+
     public void PlayPlaneSound()
     {
         PlayEffect(plane);
@@ -55,10 +60,7 @@ public class SoundManager : MonoBehaviour
         PlayEffect(rowClear);
     }
 
-    public void PlayGameOverSound()
-    {
-        PlayEffect(gameOver);
-    }
+   
 
     public void PlayEffect(AudioClip clip)
     {

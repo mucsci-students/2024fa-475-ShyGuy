@@ -50,6 +50,8 @@ public class Base : MonoBehaviour
     {
         UpdateTopRightCamera();
         UpdatePlaneHighlights();
+        if(gameOver)
+            audio1.PauseTracks();
     }
 
     public void UpdateTopRightCamera()

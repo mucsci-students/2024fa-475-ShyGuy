@@ -1,11 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-<<<<<<< Updated upstream
 using System.Drawing;
-=======
 using JetBrains.Annotations;
 using UnityEditor;
->>>>>>> Stashed changes
 using UnityEngine;
 using UnityEngine.ProBuilder.Shapes;
 
@@ -233,6 +230,7 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         PlaneCamera cam = FindObjectOfType<PlaneCamera>();
+
         if (cam == null)
         {
             Debug.LogError("PlaneCamera not found in the scene.");
