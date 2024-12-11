@@ -95,7 +95,7 @@ public class Base : MonoBehaviour
     }
 
     // Create a plane of squares at (0, 0, 0)
-    private void CreateBasePlane()
+    public void CreateBasePlane()
     {
         planeParent = new GameObject("BasePlane");
         planeParent.transform.parent = transform;
