@@ -16,6 +16,11 @@ public class GameManager : MonoBehaviour
     // Whether or not the player can use keys at this moment
     public bool playerKeyControlled = true;
 
+    public Vector3Int forwardDirection = Vector3Int.forward;
+    public Vector3Int backDirection = Vector3Int.back;
+    public Vector3Int leftDirection = Vector3Int.left;
+    public Vector3Int rightDirection = Vector3Int.right;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -32,6 +37,8 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         CheckMouseInput();
+
+        UpdateMoveDirection();
 
         if (playerKeyControlled)
         {
@@ -97,22 +104,22 @@ public class GameManager : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.W))
         {
             // Move forward
-            MoveShape(new(0, 0, 1));
+            MoveShape(forwardDirection);
         }
         else if (Input.GetKeyDown(KeyCode.S))
         {
             // Move backward
-            MoveShape(new(0, 0, -1));
+            MoveShape(backDirection);
         }
         else if (Input.GetKeyDown(KeyCode.A))
         {
             // Move left
-            MoveShape(new(-1, 0, 0));
+            MoveShape(leftDirection);
         }
         else if (Input.GetKeyDown(KeyCode.D))
         {
             // Move right
-            MoveShape(new(1, 0, 0));
+            MoveShape(rightDirection);
         }
         else if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -128,6 +135,51 @@ public class GameManager : MonoBehaviour
         {
             // Place shape
             Base.Instance.PlaceBlock();
+        }
+    }
+
+    public void UpdateMoveDirection()
+    {
+        // Get the camera's forward and right direction
+        Vector3 cameraForward = Camera.main.transform.forward;
+        Vector3 cameraRight = Camera.main.transform.right;
+
+        // Normalize the vectors (optional, to ensure uniform movement speed)
+        cameraForward.y = 0; // Remove vertical component to keep movement in the XZ plane
+        cameraRight.y = 0;
+        cameraForward.Normalize();
+        cameraRight.Normalize();
+        // Check camera facing right
+        if (Vector3.Dot(cameraForward, Vector3.right) > 0.5f) // Camera is facing roughly to the right
+        {
+            forwardDirection = Vector3Int.right; // Move right
+            backDirection = Vector3Int.left;     // Move left
+            leftDirection = Vector3Int.forward;  // Move forward
+            rightDirection = Vector3Int.back;    // Move backward
+        }
+        // Check camera facing left
+        else if (Vector3.Dot(cameraForward, Vector3.left) > 0.5f) // Camera is facing roughly to the left
+        {
+            forwardDirection = Vector3Int.left;  // Move left
+            backDirection = Vector3Int.right;    // Move right
+            leftDirection = Vector3Int.back;     // Move backward
+            rightDirection = Vector3Int.forward; // Move forward
+        }
+        // Check camera facing forward
+        else if (Vector3.Dot(cameraForward, Vector3.forward) > 0.5f) // Camera is facing forward
+        {
+            forwardDirection = Vector3Int.forward;  // Move forward
+            backDirection = Vector3Int.back;        // Move backward
+            leftDirection = Vector3Int.left;        // Move left
+            rightDirection = Vector3Int.right;      // Move right
+        }
+        // Check camera facing backward
+        else if (Vector3.Dot(cameraForward, Vector3.back) > 0.5f) // Camera is facing backward
+        {
+            forwardDirection = Vector3Int.back;    // Move backward
+            backDirection = Vector3Int.forward;    // Move forward
+            leftDirection = Vector3Int.right;      // Move right
+            rightDirection = Vector3Int.left;      // Move left
         }
     }
 

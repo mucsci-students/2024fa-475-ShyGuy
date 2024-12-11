@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class Base : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class Base : MonoBehaviour
     private Dictionary<Vector3Int, GameObject> planeSquares;
 
     public SoundManager audio1;
+
+    public GameObject arrowPrefab;
 
     private void Awake()
     {
@@ -111,7 +114,61 @@ public class Base : MonoBehaviour
                 planeSquares[position] = square;
             }
         }
+
+        CreateArrows();
     }
+
+    private void CreateArrows()
+    {
+        GameObject arrowsParent = new GameObject("DirectionArrows");
+        arrowsParent.transform.parent = planeParent.transform;
+
+        // Create arrows
+        CreateArrow(new Vector3(width - 0.5f + 1.0f, -0.5f, depth / 2.0f - 0.5f), Vector3.right, Color.yellow, arrowsParent.transform); // Right
+        CreateArrow(new Vector3(-0.5f - 1.0f, -0.5f, depth / 2.0f - 0.5f), Vector3.left, Color.green, arrowsParent.transform); // Left
+        CreateArrow(new Vector3(width / 2.0f - 0.5f, -0.5f, depth - 0.5f + 1.0f), Vector3.forward, Color.red, arrowsParent.transform); // Forward
+        CreateArrow(new Vector3(width / 2.0f - 0.5f, -0.5f, -0.5f - 1.0f), Vector3.back, Color.blue, arrowsParent.transform); // Back
+    }
+
+    private void CreateArrow(Vector3 position, Vector3 direction, Color color, Transform parent)
+    {
+        if (arrowPrefab == null)
+        {
+            Debug.Log("Need to be assigned in the scene.");
+            return;
+        }
+
+        // Instantiate the arrow at the specified position and parent
+        GameObject arrowInstance = Instantiate(arrowPrefab, position, Quaternion.identity, parent);
+
+        // Rotate the arrow so it faces the given direction, aligning with the world-up vector (0, 1, 0).
+        // Use the FromToRotation to rotate from 'up' (0,1,0) to the direction, which ensures proper orientation
+        arrowInstance.transform.rotation = Quaternion.FromToRotation(Vector3.up, direction);
+        if (direction == Vector3.left)
+        {
+            arrowInstance.transform.rotation *= Quaternion.Euler(0, -90, 0);
+        }
+        else if (direction == Vector3.right)
+        {
+            arrowInstance.transform.rotation *= Quaternion.Euler(0, 90, 0);
+        }
+        else if (direction == Vector3.back)
+        {
+            arrowInstance.transform.rotation *= Quaternion.Euler(0, 180, 0);
+        }
+
+        // Access the subgameobjects and change their colors
+        Transform part1 = arrowInstance.transform.GetChild(0); // First subgameobject
+        Transform part2 = arrowInstance.transform.GetChild(1); // Second subgameobject
+
+        // Apply the color to both subgameobjects' MeshRenderer components
+        Renderer part1Renderer = part1.GetComponent<Renderer>();
+        part1Renderer.material.color = color;   
+
+        Renderer part2Renderer = part2.GetComponent<Renderer>();
+        part2Renderer.material.color = color;
+    }
+
 
     // Update highlights based on the highest block on the base
     private void UpdatePlaneHighlights()

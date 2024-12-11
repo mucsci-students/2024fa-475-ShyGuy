@@ -2554,6 +2554,7 @@ MonoBehaviour:
   clearedRows: 0
   gameOver: 0
   audio1: {fileID: 0}
+  arrowPrefab: {fileID: 2643270046655566414, guid: 22af13c518918504989a27e9e60fa599, type: 3}
 --- !u!4 &1820280018
 Transform:
   m_ObjectHideFlags: 0
