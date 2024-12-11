@@ -35,21 +35,21 @@ public class ScoreHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(gameScript.skipHere == true)
+        if (gameScript.skipHere == true)
         {
             curBlock += 1;
             gameScript.skipHere = false;
-            
+
         }
-        if(!baseScript.gameOver)
+        if (!baseScript.gameOver)
         {
-            if(baseScript.clearedRows > rows)
+            if (baseScript.clearedRows > rows)
             {
                 curScore += 100;
                 rows += 1;
                 updateScore();
             }
-            if(shapeScript.currentBlockId != curBlock)
+            if (shapeScript.currentBlockId != curBlock)
             {
                 curBlock += 1;
                 updateScore();
@@ -58,7 +58,13 @@ public class ScoreHandler : MonoBehaviour
         }
         else
         {
-            // MDF: Temporary design
+            gameScript.GameOver(); // MDF: Temporary design
+            StartCoroutine(WaitAndLoadScene());
+        }
+
+        IEnumerator WaitAndLoadScene()
+        {
+            yield return new WaitForSeconds(10f); // Wait for 10 seconds
             SceneManager.LoadScene("Main Menu");
         }
 

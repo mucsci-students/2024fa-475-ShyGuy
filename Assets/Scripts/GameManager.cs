@@ -1,6 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+<<<<<<< Updated upstream
 using System.Drawing;
+=======
+using JetBrains.Annotations;
+using UnityEditor;
+>>>>>>> Stashed changes
 using UnityEngine;
 using UnityEngine.ProBuilder.Shapes;
 
@@ -13,6 +18,10 @@ public class GameManager : MonoBehaviour
     private Vector3 lastMousePosition;
     private bool rightMouseButtonPressed;
     public bool skipHere;
+
+    public Airplane airplane;
+
+    public Base gamebase;
 
     // Whether or not the player can use keys at this moment
     public bool playerKeyControlled = true;
@@ -33,6 +42,9 @@ public class GameManager : MonoBehaviour
             Instance = this;
             //DontDestroyOnLoad(gameObject);
         }
+        gamebase = FindObjectOfType<Base>();
+        airplane = FindObjectOfType<Airplane>();
+
     }
 
     void Update()
@@ -45,6 +57,8 @@ public class GameManager : MonoBehaviour
         {
             CheckKeyInput();
         }
+        if(gamebase.gameOver)
+            GameOver();
     }
 
     public void CheckMouseInput()
@@ -215,4 +229,30 @@ public class GameManager : MonoBehaviour
         Shape.Instance.currentPos = newPos;
         Shape.Instance.transform.position = newPos;
     }
+
+    public void GameOver()
+    {
+        PlaneCamera cam = FindObjectOfType<PlaneCamera>();
+        if (cam == null)
+        {
+            Debug.LogError("PlaneCamera not found in the scene.");
+            return;
+        }
+
+        Transform target = cam.targetTransform;
+        if (target == null)
+        {
+            Debug.LogError("PlaneCamera's targetTransform is null.");
+            return;
+        }
+
+        cam.Move(target);
+        airplane.ActivateAirplane();
+        SoundManager ap = FindObjectOfType<SoundManager>();
+        if (ap != null)
+        {
+            ap.PlayPlaneSound();
+        }
+    }
+
 }

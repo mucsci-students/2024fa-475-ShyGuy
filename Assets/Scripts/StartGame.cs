@@ -11,7 +11,8 @@ public class StartGame : MonoBehaviour
     {
         //Loads game scene.
         // MDF: Temporary design
-        SceneManager.LoadScene("MDF_playground");
+        //SceneManager.LoadScene("MDF_playground");
+        SceneManager.LoadScene("SkyTetris3D");
     }
     public void Instructions()
     {

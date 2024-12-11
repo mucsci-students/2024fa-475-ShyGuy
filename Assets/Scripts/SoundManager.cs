@@ -13,7 +13,7 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private AudioSource citynoise;
 
     [Header("Clips")]
-    [SerializeField] public AudioClip move;
+    [SerializeField] public AudioClip plane;
     [SerializeField] public AudioClip drop;
     [SerializeField] public AudioClip rowClear;
     [SerializeField] private AudioClip gameOver;
@@ -40,9 +40,9 @@ public class SoundManager : MonoBehaviour
 
     }
 
-    public void PlayMoveSound()
+    public void PlayPlaneSound()
     {
-        PlayEffect(move);
+        PlayEffect(plane);
     }
 
     public void PlayDropSound()
