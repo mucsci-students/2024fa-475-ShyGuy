@@ -22,7 +22,7 @@ public class ScoreHandler : MonoBehaviour
     void Start()
     {
         scoreLimit = 1000;
-        upgradeCount = 1;
+        upgradeCount = 0;
         rows = 0;
         curScore = 0;
         curBlock = -1;
@@ -77,6 +77,7 @@ public class ScoreHandler : MonoBehaviour
         if (curScore >= (scoreLimit + (upgradeCount * 500)))
         {
             Base.Instance.UpgradeBase();
+            Debug.Log(TextDisplay.Instance);
             TextDisplay.Instance.TriggerText("Good job! What's next? A bigger one?");
             curScore = 0;
             upgradeCount +=1;
