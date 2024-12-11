@@ -206,6 +206,7 @@ public class GameManager : MonoBehaviour
             newPos.z < 0 || newPos.z + 1 >= Base.Instance.depth)
         {
             // Out of bounds
+            TextDisplay.Instance.TriggerText("Maybe I should try to rotate it?(Press Q/E)");
             return;
         }
         int heightDiff = int.MaxValue;

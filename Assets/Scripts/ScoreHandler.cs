@@ -57,6 +57,7 @@ public class ScoreHandler : MonoBehaviour
         else
         {
             gameScript.GameOver(); // MDF: Temporary design
+            TextDisplay.Instance.TriggerText("What is that? A plane?");
             StartCoroutine(WaitAndLoadScene());
         }
 

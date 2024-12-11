@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MDF_playground.unity
     guid: 735a9825f17b89e4d9fc353c47258356
+  - enabled: 1
+    path: Assets/Scenes/SkyTetris3D.unity
+    guid: b97a18553b8ba1340aaa5e6bf5b80ee6
   m_configObjects: {}
