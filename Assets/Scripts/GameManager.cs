@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
 using UnityEngine.ProBuilder.Shapes;
 
@@ -156,6 +157,7 @@ public class GameManager : MonoBehaviour
             backDirection = Vector3Int.left;     // Move left
             leftDirection = Vector3Int.forward;  // Move forward
             rightDirection = Vector3Int.back;    // Move backward
+            Base.Instance.ResetArrowColor("right");
         }
         // Check camera facing left
         else if (Vector3.Dot(cameraForward, Vector3.left) > 0.5f) // Camera is facing roughly to the left
@@ -164,6 +166,7 @@ public class GameManager : MonoBehaviour
             backDirection = Vector3Int.right;    // Move right
             leftDirection = Vector3Int.back;     // Move backward
             rightDirection = Vector3Int.forward; // Move forward
+            Base.Instance.ResetArrowColor("left");
         }
         // Check camera facing forward
         else if (Vector3.Dot(cameraForward, Vector3.forward) > 0.5f) // Camera is facing forward
@@ -172,6 +175,7 @@ public class GameManager : MonoBehaviour
             backDirection = Vector3Int.back;        // Move backward
             leftDirection = Vector3Int.left;        // Move left
             rightDirection = Vector3Int.right;      // Move right
+            Base.Instance.ResetArrowColor("forward");
         }
         // Check camera facing backward
         else if (Vector3.Dot(cameraForward, Vector3.back) > 0.5f) // Camera is facing backward
@@ -180,6 +184,7 @@ public class GameManager : MonoBehaviour
             backDirection = Vector3Int.forward;    // Move forward
             leftDirection = Vector3Int.right;      // Move right
             rightDirection = Vector3Int.left;      // Move left
+            Base.Instance.ResetArrowColor("back");
         }
     }
 

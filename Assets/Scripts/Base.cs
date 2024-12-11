@@ -20,6 +20,8 @@ public class Base : MonoBehaviour
 
     public SoundManager audio1;
 
+    public GameObject arrowsParent;
+
     public GameObject arrowPrefab;
 
     private void Awake()
@@ -120,14 +122,14 @@ public class Base : MonoBehaviour
 
     private void CreateArrows()
     {
-        GameObject arrowsParent = new GameObject("DirectionArrows");
+        arrowsParent = new GameObject("DirectionArrows");
         arrowsParent.transform.parent = planeParent.transform;
 
         // Create arrows
-        CreateArrow(new Vector3(width - 0.5f + 1.0f, -0.5f, depth / 2.0f - 0.5f), Vector3.right, Color.yellow, arrowsParent.transform); // Right
-        CreateArrow(new Vector3(-0.5f - 1.0f, -0.5f, depth / 2.0f - 0.5f), Vector3.left, Color.green, arrowsParent.transform); // Left
         CreateArrow(new Vector3(width / 2.0f - 0.5f, -0.5f, depth - 0.5f + 1.0f), Vector3.forward, Color.red, arrowsParent.transform); // Forward
+        CreateArrow(new Vector3(width - 0.5f + 1.0f, -0.5f, depth / 2.0f - 0.5f), Vector3.right, Color.yellow, arrowsParent.transform); // Right
         CreateArrow(new Vector3(width / 2.0f - 0.5f, -0.5f, -0.5f - 1.0f), Vector3.back, Color.blue, arrowsParent.transform); // Back
+        CreateArrow(new Vector3(-0.5f - 1.0f, -0.5f, depth / 2.0f - 0.5f), Vector3.left, Color.green, arrowsParent.transform); // Left
     }
 
     private void CreateArrow(Vector3 position, Vector3 direction, Color color, Transform parent)
@@ -169,6 +171,56 @@ public class Base : MonoBehaviour
         part2Renderer.material.color = color;
     }
 
+    public void ResetArrowColor(string facing)
+    {
+        if (facing == "right") // Camera is facing roughly to the right
+        {
+            arrowsParent.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material.color = UnityEngine.Color.green; // forward
+            arrowsParent.transform.GetChild(0).GetChild(1).GetComponent<Renderer>().material.color = UnityEngine.Color.green; // forward
+            arrowsParent.transform.GetChild(1).GetChild(0).GetComponent<Renderer>().material.color = UnityEngine.Color.red; // right
+            arrowsParent.transform.GetChild(1).GetChild(1).GetComponent<Renderer>().material.color = UnityEngine.Color.red; // right
+            arrowsParent.transform.GetChild(2).GetChild(0).GetComponent<Renderer>().material.color = UnityEngine.Color.yellow; // back
+            arrowsParent.transform.GetChild(2).GetChild(1).GetComponent<Renderer>().material.color = UnityEngine.Color.yellow; // back
+            arrowsParent.transform.GetChild(3).GetChild(0).GetComponent<Renderer>().material.color = UnityEngine.Color.blue; // left
+            arrowsParent.transform.GetChild(3).GetChild(1).GetComponent<Renderer>().material.color = UnityEngine.Color.blue; // left
+        }
+        // Check camera facing left
+        else if (facing == "left") // Camera is facing roughly to the left
+        {
+            arrowsParent.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material.color = UnityEngine.Color.yellow; // forward
+            arrowsParent.transform.GetChild(0).GetChild(1).GetComponent<Renderer>().material.color = UnityEngine.Color.yellow; // forward
+            arrowsParent.transform.GetChild(1).GetChild(0).GetComponent<Renderer>().material.color = UnityEngine.Color.blue; // right
+            arrowsParent.transform.GetChild(1).GetChild(1).GetComponent<Renderer>().material.color = UnityEngine.Color.blue; // right
+            arrowsParent.transform.GetChild(2).GetChild(0).GetComponent<Renderer>().material.color = UnityEngine.Color.green; // back
+            arrowsParent.transform.GetChild(2).GetChild(1).GetComponent<Renderer>().material.color = UnityEngine.Color.green; // back
+            arrowsParent.transform.GetChild(3).GetChild(0).GetComponent<Renderer>().material.color = UnityEngine.Color.red; // left
+            arrowsParent.transform.GetChild(3).GetChild(1).GetComponent<Renderer>().material.color = UnityEngine.Color.red; // left
+        }
+        // Check camera facing forward
+        else if (facing == "forward") // Camera is facing forward
+        {
+            arrowsParent.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material.color = UnityEngine.Color.red; // forward
+            arrowsParent.transform.GetChild(0).GetChild(1).GetComponent<Renderer>().material.color = UnityEngine.Color.red; // forward
+            arrowsParent.transform.GetChild(1).GetChild(0).GetComponent<Renderer>().material.color = UnityEngine.Color.yellow; // right
+            arrowsParent.transform.GetChild(1).GetChild(1).GetComponent<Renderer>().material.color = UnityEngine.Color.yellow; // right
+            arrowsParent.transform.GetChild(2).GetChild(0).GetComponent<Renderer>().material.color = UnityEngine.Color.blue; // back
+            arrowsParent.transform.GetChild(2).GetChild(1).GetComponent<Renderer>().material.color = UnityEngine.Color.blue; // back
+            arrowsParent.transform.GetChild(3).GetChild(0).GetComponent<Renderer>().material.color = UnityEngine.Color.green; // left
+            arrowsParent.transform.GetChild(3).GetChild(1).GetComponent<Renderer>().material.color = UnityEngine.Color.green; // left
+        }
+        // Check camera facing backward
+        else if (facing == "back") // Camera is facing backward
+        {
+            arrowsParent.transform.GetChild(0).GetChild(0).GetComponent<Renderer>().material.color = UnityEngine.Color.blue; // forward
+            arrowsParent.transform.GetChild(0).GetChild(1).GetComponent<Renderer>().material.color = UnityEngine.Color.blue; // forward
+            arrowsParent.transform.GetChild(1).GetChild(0).GetComponent<Renderer>().material.color = UnityEngine.Color.green; // right
+            arrowsParent.transform.GetChild(1).GetChild(1).GetComponent<Renderer>().material.color = UnityEngine.Color.green; // right
+            arrowsParent.transform.GetChild(2).GetChild(0).GetComponent<Renderer>().material.color = UnityEngine.Color.red; // back
+            arrowsParent.transform.GetChild(2).GetChild(1).GetComponent<Renderer>().material.color = UnityEngine.Color.red; // back
+            arrowsParent.transform.GetChild(3).GetChild(0).GetComponent<Renderer>().material.color = UnityEngine.Color.yellow; // left
+            arrowsParent.transform.GetChild(3).GetChild(1).GetComponent<Renderer>().material.color = UnityEngine.Color.yellow; // left
+        }
+    }
 
     // Update highlights based on the highest block on the base
     private void UpdatePlaneHighlights()
