@@ -44,6 +44,8 @@ public class Base : MonoBehaviour
         Initialize(4, 4, 16); // Example initialization
         AddTopRightCamera();  // Add the top-right camera
         CreateBasePlane();    // Create the plane of squares
+
+        TextDisplay.Instance.TriggerText("There have been a lot of low flying aircrafts recently...");
     }
 
     void Update()
