@@ -13,7 +13,6 @@ public class ScoreHandler : MonoBehaviour
     public Shape shapeScript;
     public GameObject gameManager;
     public GameManager gameScript;
-    public int prevScore;
     public int curScore;
     public int rows;
     public long curBlock;
@@ -21,7 +20,6 @@ public class ScoreHandler : MonoBehaviour
     void Start()
     {
         rows = 0;
-        prevScore = 0;
         curScore = 0;
         curBlock = -1;
         baseObject = GameObject.Find("Base");
@@ -79,5 +77,9 @@ public class ScoreHandler : MonoBehaviour
     public void updateScore()
     {
         scoreCount.text = "Score: " + curScore;
+        // if(reset)
+        // {
+        //     scoreCount.text = "Score: " + 0;
+        // }
     }
 }

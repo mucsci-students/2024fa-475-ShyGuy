@@ -6,12 +6,18 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
     [SerializeField] GameObject pauseMenu;
-    GameObject scoreScreen;
+    public GameObject scoreScreen;
+    public ScoreHandler scoreScript;
+    public GameObject baseObject;
+    public Base baseScript;
     // Start is called before the first frame update
     void Start()
     {
         scoreScreen = GameObject.Find("Score");
+        scoreScript = scoreScreen.GetComponent<ScoreHandler>();
         pauseMenu.SetActive(false);
+        baseObject = GameObject.Find("Base");
+        baseScript = baseObject.GetComponent<Base>();
 
     }
 
@@ -46,5 +52,14 @@ public class PauseMenu : MonoBehaviour
     {
         //Load main menu scene.
         SceneManager.LoadScene(0);
+    }
+    public void Restart()
+    {
+        baseScript.Initialize(2, 2, 14);
+        baseScript.UpgradeBase();
+        scoreScript.curScore = 0;
+        scoreScript.rows = 0;
+        scoreScript.updateScore();
+        ResumeTheGame();
     }
 }
