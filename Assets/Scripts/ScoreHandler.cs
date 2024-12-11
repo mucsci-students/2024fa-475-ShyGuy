@@ -16,9 +16,13 @@ public class ScoreHandler : MonoBehaviour
     public int curScore;
     public int rows;
     public long curBlock;
+    public int scoreLimit;
+    public int upgradeCount;
     // Start is called before the first frame update
     void Start()
     {
+        scoreLimit = 1000;
+        upgradeCount = 1;
         rows = 0;
         curScore = 0;
         curBlock = -1;
@@ -36,7 +40,9 @@ public class ScoreHandler : MonoBehaviour
         if (gameScript.skipHere == true)
         {
             curBlock += 1;
+            curScore -= 50;
             gameScript.skipHere = false;
+            updateScore();
 
         }
         if (!baseScript.gameOver)
@@ -67,19 +73,16 @@ public class ScoreHandler : MonoBehaviour
         }
 
         // MDF: Temporary design
-        if (curScore >= 1000)
+        if (curScore >= (scoreLimit + (upgradeCount * 500)))
         {
             Base.Instance.UpgradeBase();
             curScore = 0;
+            upgradeCount +=1;
             updateScore();
         }
     }
     public void updateScore()
     {
         scoreCount.text = "Score: " + curScore;
-        // if(reset)
-        // {
-        //     scoreCount.text = "Score: " + 0;
-        // }
     }
 }
