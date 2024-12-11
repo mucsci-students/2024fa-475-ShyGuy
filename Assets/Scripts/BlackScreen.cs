@@ -1,7 +1,8 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ScreenFader : MonoBehaviour
+public class BlackScreen : MonoBehaviour
 {
     public Image blackScreen;
     public float fadeSpeed = 5f;
