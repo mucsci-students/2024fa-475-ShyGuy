@@ -2,14 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.UI;
 
 public class AudioManager : MonoBehaviour
 {
-    [SerializeField] private AudioMixer audioMixer;
+    public Slider volumeSlider;
 
-    
-    public void SetMasterVolume(float level){
-        audioMixer.SetFloat("MasterVolume", Mathf.Log10(level)*20);
+    AudioSource audioSource;
+ 
+    public void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
     }
-}
+}   
 
