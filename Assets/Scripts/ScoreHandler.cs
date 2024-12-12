@@ -69,7 +69,12 @@ public class ScoreHandler : MonoBehaviour
 
         IEnumerator WaitAndLoadScene()
         {
-            yield return new WaitForSeconds(10f); // Wait for 10 seconds
+            BlackScreen gm = FindObjectOfType<BlackScreen>();
+            yield return new WaitForSeconds(4.1f);
+            gm.PlayAnimation();
+            yield return new WaitForSeconds(0.2f);
+            gm.ShowGameOver();
+            yield return new WaitForSeconds(5f); // Wait for 10 seconds
             SceneManager.LoadScene("Main Menu");
         }
 

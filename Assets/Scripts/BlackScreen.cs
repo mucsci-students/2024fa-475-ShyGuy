@@ -1,26 +1,56 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 public class BlackScreen : MonoBehaviour
 {
-    public Image blackScreen;
-    public float fadeSpeed = 5f;
+    public Image blackScreen; // Assign this in the inspector with the black screen UI Image.
+    public Animator animator; // Assign this in the inspector with the Animator controlling the desired animation.
 
-    public void FadeToBlack()
+    private bool isAnimationPlaying; // Track animation state to prevent repeated triggering
+
+    private void Start()
     {
-        StartCoroutine(FadeCoroutine());
+        EnsureAssignments(); // Validate and assign references
+        SetVisibility(false); // Ensure black screen starts invisible
+        animator.enabled = false;
     }
 
-    private IEnumerator FadeCoroutine()
+    private void EnsureAssignments()
     {
-        Color color = blackScreen.color;
-        while (color.a < 1f)
+        if (blackScreen == null)
         {
-            color.a += Time.deltaTime * fadeSpeed;
-            blackScreen.color = color;
-            yield return null;
+            Debug.LogError("BlackScreen Image not assigned in inspector!");
         }
+
+        if (animator == null)
+        {
+            Debug.LogError("Animator not assigned in inspector!");
+        }
+    }
+
+    // Call this method to show the black screen and play the animation (once)
+    public void ShowGameOver()
+    {
+        SetVisibility(true); // Make the black screen visible.
+        Debug.Log("screen visible and animation played.");
+    }
+
+    private void SetVisibility(bool visible)
+    {
+        if (blackScreen != null)
+        {
+            blackScreen.enabled = visible;
+        }
+        else
+        {
+            Debug.LogError("BlackScreen Image not assigned");
+        }
+    }
+
+    public void PlayAnimation()
+    {
+        animator.enabled = true;
+        
+        
     }
 }
