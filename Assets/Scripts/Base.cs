@@ -35,11 +35,11 @@ public class Base : MonoBehaviour
             Instance = this;
             //DontDestroyOnLoad(gameObject);
         }
-        audio1 = FindObjectOfType<SoundManager>();
     }
 
     void Start()
     {
+        audio1 = FindObjectOfType<SoundManager>();
         gameOver = false;
         Initialize(4, 4, 16); // Example initialization
         AddTopRightCamera();  // Add the top-right camera
@@ -114,7 +114,7 @@ public class Base : MonoBehaviour
                 square.transform.localPosition = new Vector3(x + 0.5f, -0.5f, z + 0.5f); // Base level at -0.5
                 square.transform.localRotation = Quaternion.Euler(90, 0, 0); // Face up
                 square.transform.localScale = new Vector3(1, 1, 1); // Grid-aligned
-                square.GetComponent<Renderer>().material = new Material(Shader.Find("Unlit/Color"));
+                square.GetComponent<Renderer>().material = new Material(Shader.Find("Standard"));
                 square.GetComponent<Renderer>().material.color = Color.gray; // Initial gray color
 
                 planeSquares[position] = square;

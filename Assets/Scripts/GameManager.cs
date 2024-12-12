@@ -39,9 +39,13 @@ public class GameManager : MonoBehaviour
             Instance = this;
             //DontDestroyOnLoad(gameObject);
         }
+
+    }
+
+    void Start()
+    {
         gamebase = FindObjectOfType<Base>();
         airplane = FindObjectOfType<Airplane>();
-
     }
 
     void Update()
