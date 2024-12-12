@@ -433,6 +433,8 @@ MonoBehaviour:
   curScore: 0
   rows: 0
   curBlock: 0
+  scoreLimit: 0
+  upgradeCount: 0
 --- !u!114 &171914352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1504,6 +1506,16 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a52b733d4a1e0db4886b1b992369aca1, type: 3}
+--- !u!82 &718544729 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 4949771351445062201, guid: a52b733d4a1e0db4886b1b992369aca1, type: 3}
+  m_PrefabInstance: {fileID: 718544728}
+  m_PrefabAsset: {fileID: 0}
+--- !u!82 &718544730 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 71698264891325092, guid: a52b733d4a1e0db4886b1b992369aca1, type: 3}
+  m_PrefabInstance: {fileID: 718544728}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &738293468
 GameObject:
   m_ObjectHideFlags: 0
@@ -1565,6 +1577,8 @@ MonoBehaviour:
   curScore: 0
   rows: 0
   curBlock: 0
+  scoreLimit: 0
+  upgradeCount: 0
 --- !u!114 &738293471
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4686,7 +4700,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 718544730}
         m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
         m_MethodName: set_volume
         m_Mode: 0
@@ -4698,7 +4712,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 718544730}
         m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
         m_MethodName: set_volume
         m_Mode: 0
@@ -4710,7 +4724,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 718544729}
         m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
         m_MethodName: set_volume
         m_Mode: 0
