@@ -10,6 +10,10 @@ public class PauseMenu : MonoBehaviour
     public ScoreHandler scoreScript;
     public GameObject baseObject;
     public Base baseScript;
+    public GameObject w;
+    public GameObject a;
+    public GameObject d;
+    public GameObject s;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,6 +22,10 @@ public class PauseMenu : MonoBehaviour
         pauseMenu.SetActive(false);
         baseObject = GameObject.Find("Base");
         baseScript = baseObject.GetComponent<Base>();
+         w = GameObject.Find("W");
+         a = GameObject.Find("A");
+         s = GameObject.Find("S");
+         d = GameObject.Find("D");
 
     }
 
@@ -40,6 +48,10 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 0f;
         pauseMenu.SetActive(true);
         scoreScreen.SetActive(false);
+        w.SetActive(false);
+        a.SetActive(false);
+        s.SetActive(false);
+        d.SetActive(false);
     }
     public void ResumeTheGame()
     {
@@ -47,6 +59,10 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 1f;
         pauseMenu.SetActive(false);
         scoreScreen.SetActive(true);
+        w.SetActive(true);
+        a.SetActive(true);
+        s.SetActive(true);
+        d.SetActive(true);
     }
         public void ExitToMenu()
     {
